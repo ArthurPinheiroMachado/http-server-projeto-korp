@@ -1,0 +1,23 @@
+services:
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - korp-network
+
+  http-server-projeto-korp:
+    image: http-server-projeto-korp:latest
+    container_name: http-server-projeto-korp
+    environment:
+      - HTTP_PORT=8080
+      - TIMEOUT_TIME=3
+      - PROJECT_NAME=Projeto Korp
+    networks:
+      - korp-network
+
+networks:
+  korp-network:
