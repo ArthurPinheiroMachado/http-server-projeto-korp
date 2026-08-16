@@ -9,6 +9,9 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/collectors"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func main() {
@@ -29,8 +32,16 @@ func webServer() error {
 		return trace.Apply(err)
 	}
 
+	reg := prometheus.NewRegistry()
+	reg.MustRegister(
+		collectors.NewBuildInfoCollector(),
+		collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}),
+		collectors.NewGoCollector(),
+	)
+
 	router := mux.NewRouter().UseEncodedPath()
 
+	router.Handle("/metrics", promhttp.HandlerFor(reg, promhttp.HandlerOpts{})).Methods("GET")
 	router.HandleFunc("/projeto-korp", projetokorp.GetProjetoKorp(projectName)).Methods("GET")
 
 	fmt.Println("Starting HTTP SERVER PROJETO KORP at port ", port)

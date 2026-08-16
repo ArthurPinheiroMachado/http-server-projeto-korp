@@ -1,0 +1,10 @@
+groups:
+  - name: korp-alerts
+    rules:
+      - alert: HttpServerDown
+        expr: up{job="http-server-projeto-korp"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Servidor HTTP fora do ar"
