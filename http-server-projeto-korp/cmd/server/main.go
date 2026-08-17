@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"http-server-projeto-korp/internal/middlewares"
 	projetokorp "http-server-projeto-korp/internal/projeto_korp"
 	"http-server-projeto-korp/internal/util"
 	"net/http"
@@ -33,18 +34,28 @@ func webServer() error {
 	}
 
 	reg := prometheus.NewRegistry()
+
+	httpRequestsTotal := prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "http_requests_total",
+			Help: "Total number of HTTP requests received.",
+		},
+		[]string{"method", "path", "status"},
+	)
+
 	reg.MustRegister(
 		collectors.NewBuildInfoCollector(),
 		collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}),
 		collectors.NewGoCollector(),
+		httpRequestsTotal,
 	)
 
 	router := mux.NewRouter().UseEncodedPath()
 
 	router.Handle("/metrics", promhttp.HandlerFor(reg, promhttp.HandlerOpts{})).Methods("GET")
-	router.HandleFunc("/projeto-korp", projetokorp.GetProjetoKorp(projectName)).Methods("GET")
+	router.HandleFunc("/projeto-korp", middlewares.MetricsMiddleware(httpRequestsTotal, projetokorp.GetProjetoKorp(projectName))).Methods("GET")
 
-	fmt.Println("Starting HTTP SERVER PROJETO KORP at port ", port)
+	fmt.Println("Starting HTTP SERVER PROJETO KORP at port", port)
 
 	server := &http.Server{
 		Addr:              fmt.Sprintf(":%s", port),

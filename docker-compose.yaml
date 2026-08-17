@@ -27,8 +27,23 @@ services:
     volumes:
       - ./prometheus/config/prometheus.yaml:/etc/prometheus/prometheus.yml:ro
       - ./prometheus/config/rules:/etc/prometheus/rules:ro
+      - prometheus-data:/prometheus
     networks:
       - korp-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    volumes:
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - korp-network
+
+volumes:
+  prometheus-data:
+  grafana-data:
 
 networks:
   korp-network:
