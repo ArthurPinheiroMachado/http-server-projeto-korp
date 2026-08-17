@@ -1,0 +1,5 @@
+---
+- name: Criar rede Docker do Projeto Korp
+  community.docker.docker_network:
+    name: korp-network
+    state: present

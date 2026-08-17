@@ -1,0 +1,10 @@
+---
+- name: Provisionar Projeto Korp
+  hosts: servers
+  become: true
+
+  roles:
+    - docker
+    - network
+    - application
+    - validation

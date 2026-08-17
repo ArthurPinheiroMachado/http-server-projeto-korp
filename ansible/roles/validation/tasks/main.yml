@@ -1,0 +1,12 @@
+---
+- name: Validar serviço HTTP
+  ansible.builtin.uri:
+    url: http://localhost:80/projeto-korp
+    method: GET
+    status_code: 200
+    return_content: true
+  register: http_response
+
+- name: Exibir resposta do serviço
+  ansible.builtin.debug:
+    msg: "{{ http_response.content }}"
