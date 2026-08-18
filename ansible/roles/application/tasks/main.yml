@@ -1,4 +1,15 @@
 ---
+- name: Sincronizar arquivos do projeto para o host remoto
+  ansible.posix.synchronize:
+    src: "{{ playbook_dir }}/../"
+    dest: "{{ project_dir }}"
+    delete: true
+    rsync_opts:
+      - "--exclude=.git"
+      - "--exclude=node_modules"
+  become: false
+  when: inventory_hostname != "localhost"
+  
 - name: Fazer build da imagem do HTTP Server
   ansible.builtin.command:
     cmd: docker compose build http-server-projeto-korp
