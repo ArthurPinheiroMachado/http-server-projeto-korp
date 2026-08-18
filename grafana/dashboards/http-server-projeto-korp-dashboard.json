@@ -3,7 +3,7 @@
   "kind": "Dashboard",
   "metadata": {
     "name": "addq8xd",
-    "generation": 13,
+    "generation": 15,
     "creationTimestamp": "2026-08-18T02:07:45Z",
     "labels": {},
     "annotations": {}
@@ -369,7 +369,7 @@
                       "version": "v0",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "(\n  sum(increase(http_requests_total{status=~\"4..|5..\"}[5m]))\n  or vector(0)\n)\n/\nsum(increase(http_requests_total[5m]))\n* 100",
+                        "expr": "(\n  sum(increase(http_requests_total{status=~\"4..|5..\"}[1m]))\n  or vector(0)\n)\n/\nsum(increase(http_requests_total[1m]))\n* 100",
                         "legendFormat": "Taxa de erro das requisições",
                         "range": true
                       },
@@ -1110,7 +1110,7 @@
       "hideTimepicker": false,
       "fiscalYearStartMonth": 0
     },
-    "title": "New dashboard",
+    "title": "Projeto Korp",
     "variables": [],
     "preferences": {
       "layout": {
