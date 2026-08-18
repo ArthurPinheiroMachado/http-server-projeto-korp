@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -34,9 +35,16 @@ func MetricsMiddleware(counter *prometheus.CounterVec, next http.HandlerFunc) ht
 
 		next(rw, r)
 
+		path := r.URL.Path
+		if route := mux.CurrentRoute(r); route != nil {
+			if tpl, err := route.GetPathTemplate(); err == nil {
+				path = tpl
+			}
+		}
+
 		counter.WithLabelValues(
 			r.Method,
-			r.URL.Path,
+			path,
 			strconv.Itoa(rw.statusCode),
 		).Inc()
 
