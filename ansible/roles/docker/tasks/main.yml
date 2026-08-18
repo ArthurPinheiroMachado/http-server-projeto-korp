@@ -48,12 +48,3 @@
   ansible.builtin.command: docker info
   register: docker_info
   changed_when: false
-
-- name: Exibir versão do Docker
-  ansible.builtin.command: docker version --format '{{ "{{.Server.Version}}" }}'
-  register: docker_version
-  changed_when: false
-
-- name: Mostrar versão do Docker
-  ansible.builtin.debug:
-    msg: "Docker Engine: {{ docker_version.stdout }}"

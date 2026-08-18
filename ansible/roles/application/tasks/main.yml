@@ -1,15 +1,4 @@
 ---
-- name: Verificar Docker Compose
-  ansible.builtin.command:
-    cmd: docker compose version
-    chdir: "{{ project_dir }}"
-  register: compose_version
-  changed_when: false
-
-- name: Exibir versão do Docker Compose
-  ansible.builtin.debug:
-    msg: "{{ compose_version.stdout }}"
-
 - name: Fazer build da imagem do HTTP Server
   ansible.builtin.command:
     cmd: docker compose build http-server-projeto-korp
