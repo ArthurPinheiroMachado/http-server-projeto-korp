@@ -19,7 +19,7 @@ func GetProjetoKorp(projectName string) func(http.ResponseWriter, *http.Request)
 
 		response := AboutProjetoKorp{
 			Name:    projectName,
-			TimeNow: time.Now().UTC().Format("02/01/2006 15:04:05"),
+			TimeNow: time.Now().UTC().Format(time.RFC3339),
 		}
 
 		if err := util.JsonEncodeToWriter(w, response); err != nil {
