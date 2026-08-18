@@ -1,1 +1,3 @@
 project_dir: "{{ playbook_dir }}/.."
+ansible_become: true
+ansible_become_method: sudo
